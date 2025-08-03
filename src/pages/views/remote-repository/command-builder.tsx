@@ -1,6 +1,6 @@
-import { useDebounce, useLocalStorage } from "@uidotdev/usehooks";
+import { useDebounce, useLocalStorage, useMap } from "@uidotdev/usehooks";
 import { Play, PlusIcon, Trash } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FileData } from "react-diff-view";
 import { FileList } from "@/components/presentation/diff-file-list.tsx";
 import { FileFilterControls } from "@/components/presentation/file-filter-controls.tsx";
@@ -8,6 +8,8 @@ import { Button } from "@/components/shadcn/button.tsx";
 import {
 	Card,
 	CardAction,
+	CardContent,
+	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@/components/shadcn/card.tsx";
@@ -15,7 +17,9 @@ import { Checkbox } from "@/components/shadcn/checkbox.tsx";
 import { Input } from "@/components/shadcn/input.tsx";
 import { Label } from "@/components/shadcn/label.tsx";
 import { Separator } from "@/components/shadcn/separator.tsx";
+import { Skeleton } from "@/components/shadcn/skeleton.tsx";
 import { useDiffContext } from "@/context/diff-context.tsx";
+import { RemoteRepositoryController } from "@/controllers/remote-repository.ts";
 import { useFileFilter } from "@/hooks/use-file-filter.tsx";
 import { useSet } from "@/hooks/use-set.tsx";
 
@@ -121,33 +125,75 @@ export const RepositoryCommandBuilder = ({
 		[savedCommands, setSavedCommands, isCommandValid],
 	);
 
+	// Command -> output
+	const commandOutput = useMap<string>();
+	const [currentlyExecutingCommand, setCurrentlyExecutingCommand] = useState<
+		string | undefined
+	>(undefined);
+
+	useEffect(() => {
+		return () => setCurrentlyExecutingCommand(undefined);
+	}, []);
+
 	if (!repository) {
 		return null;
 	}
+
+	// TODO: extract out command running logic
+	const handleRunCommand = async (command: string) => {
+		setCurrentlyExecutingCommand(command);
+		new RemoteRepositoryController(repository.host, repository.workingDirectory)
+			.runFreeformCommand(command)
+			.then((result) => {
+				if (!result.success) {
+					commandOutput.set(command, result.error);
+				} else {
+					commandOutput.set(command, result.output);
+				}
+			})
+			.finally(() => {
+				setCurrentlyExecutingCommand(undefined);
+			});
+	};
+
 	return (
 		<>
 			<div className="flex flex-col gap-2 py-4">
 				<h2 className="text-2xl">Saved commands for {name}</h2>
-				{savedCommands.map((command) => (
-					<Card key={command}>
-						<CardHeader>
-							<CardTitle>
-								<code>{command}</code>
-							</CardTitle>
-							<CardAction className=" flex gap-2">
-								<Button>
-									<Play />
-								</Button>
-								<Button
-									variant="destructive"
-									onClick={() => handleDeleteCommand(command)}
-								>
-									<Trash />
-								</Button>
-							</CardAction>
-						</CardHeader>
-					</Card>
-				))}
+				{savedCommands.length > 0 ? (
+					savedCommands.map((command) => (
+						<Card key={command}>
+							<CardHeader>
+								<CardTitle>
+									<code>{command}</code>
+								</CardTitle>
+								<CardAction className=" flex gap-2">
+									<Button
+										disabled={!!currentlyExecutingCommand}
+										onClick={() => handleRunCommand(command)}
+									>
+										<Play />
+									</Button>
+									<Button
+										disabled={!!currentlyExecutingCommand}
+										variant="destructive"
+										onClick={() => handleDeleteCommand(command)}
+									>
+										<Trash />
+									</Button>
+								</CardAction>
+							</CardHeader>
+							<CardContent>
+								<CardDescription>{commandOutput.get(command)}</CardDescription>
+								{currentlyExecutingCommand === command && (
+									<Skeleton className="w-full h-1" />
+								)}
+							</CardContent>
+						</Card>
+					))
+				) : (
+					<p>No commands yet!</p>
+				)}
 			</div>
 			<Separator />
 			<h3 className="font-bold my-2 text-xl">Command Builder</h3>

@@ -3,7 +3,6 @@ use crate::{
     error::GitCommandError,
     executors::{local::LocalGitExecutor, ssh::SshGitExecutor, GitCommandExecutor},
 };
-use std::fmt::format;
 pub struct GitManager {
     executor: Box<dyn GitCommandExecutor>,
 }

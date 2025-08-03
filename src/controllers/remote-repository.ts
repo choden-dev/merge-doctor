@@ -31,6 +31,13 @@ export class RemoteRepositoryController {
 	async getDiffForPreviewMergeWithMaster(): Promise<CommandResult> {
 		return await invoke("git_preview_merge_with_master", this.commandOptions);
 	}
+
+	async runFreeformCommand(command: string): Promise<CommandResult> {
+		return await invoke("custom_command_freeform", {
+			...this.commandOptions,
+			command,
+		});
+	}
 }
 
 export const useRemoteRepositories = () =>

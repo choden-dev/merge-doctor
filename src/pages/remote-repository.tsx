@@ -31,16 +31,24 @@ export const RemoteRepositoryPage = () => {
 
 	return (
 		<>
-			<Button
-				variant="outline"
-				disabled={isLoading}
-				className="w-fit mb-2"
-				onClick={() => {
-					fetchRemoteRepositoryInformation(repo);
-				}}
-			>
-				<RefreshCcwIcon />
-			</Button>
+			<div className="flex gap-2 items-center">
+				<Button
+					variant="outline"
+					disabled={isLoading}
+					className="w-fit mb-2"
+					onClick={() => {
+						fetchRemoteRepositoryInformation(repo);
+					}}
+				>
+					<RefreshCcwIcon />
+				</Button>
+				{isLoading && (
+					<p className="text-sm">
+						If the repo is not loading, try checking if you can ssh in manually
+						with <code>ssh {repo.host}</code>
+					</p>
+				)}
+			</div>
 			<SectionLayout title={`(remote) ${repo.host}`}>
 				{isLoading ? <Skeleton className="h-10 w-[250px]" /> : <Outlet />}
 			</SectionLayout>

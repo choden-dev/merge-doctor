@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils.ts";
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
 	return (
 		<input
+			// TODO: see if this is bad
+			autoCorrect="off"
 			type={type}
 			data-slot="input"
 			className={cn(

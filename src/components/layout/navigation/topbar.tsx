@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { Button } from "@/components/shadcn/button.tsx";
 import {
 	NavigationMenu,
@@ -13,6 +13,7 @@ import { useSidebarEnabled } from "@/hooks/sidebar.tsx";
 export const AppTopBar = () => {
 	const navigate = useNavigate();
 	const isSidebarEnabled = useSidebarEnabled();
+	const { id } = useParams();
 
 	return (
 		<NavigationMenu className="py-4 gap-4 border-b border-b-sidebar-border">
@@ -24,7 +25,8 @@ export const AppTopBar = () => {
 					</h1>
 				</NavigationMenuItem>
 				<Button variant="outline" size="sm" disabled>
-					No repository selected <ChevronDownIcon />
+					{id ?? "No repository selected"}
+					<ChevronDownIcon />
 				</Button>
 				<Button onClick={() => navigate(VALID_ROUTES.ADD_REPO_ROUTE)} size="sm">
 					Add Repo
