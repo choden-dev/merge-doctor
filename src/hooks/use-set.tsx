@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 
 export function useSet<T>(initialValues: T[] = []) {
 	const [set, setSet] = useState<Set<T>>(new Set(initialValues));

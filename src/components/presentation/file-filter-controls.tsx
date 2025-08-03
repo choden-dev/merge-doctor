@@ -1,7 +1,6 @@
-import type { FileData } from "react-diff-view";
-import { Input } from "@/components/shadcn/input";
-import { Button } from "@/components/shadcn/button";
 import { FilterIcon } from "lucide-react";
+import type { FileData } from "react-diff-view";
+import { Button } from "@/components/shadcn/button";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -10,6 +9,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
+import { Input } from "@/components/shadcn/input";
 import { cn } from "@/lib/utils.ts";
 
 export interface FileFilterControlsProps {

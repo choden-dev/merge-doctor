@@ -1,10 +1,10 @@
 import { Diff, type FileData, Hunk } from "react-diff-view";
-import { Card, CardHeader, CardTitle } from "@/components/shadcn/card.tsx";
-import { generateIdentifierForFile } from "@/components/presentation/utils.ts";
 import {
 	FileList,
-	FileListProps,
+	type FileListProps,
 } from "@/components/presentation/diff-file-list.tsx";
+import { generateIdentifierForFile } from "@/components/presentation/utils.ts";
+import { Card, CardHeader, CardTitle } from "@/components/shadcn/card.tsx";
 import type { DiffInformation } from "@/context/diff-context.tsx";
 
 export const FileDiff = ({

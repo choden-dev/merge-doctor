@@ -1,6 +1,6 @@
 import { DiffView } from "@/components/presentation/diff-renderer.tsx";
-import { useDiffContext } from "@/context/diff-context.tsx";
 import { generateIdentifierForFile } from "@/components/presentation/utils.ts";
+import { useDiffContext } from "@/context/diff-context.tsx";
 
 export const RemoteRepositoryMergePreview = () => {
 	const { repository, diffWithTarget, currentBranch } = useDiffContext();

@@ -1,23 +1,23 @@
-import { FileList } from "@/components/presentation/diff-file-list.tsx";
-import { FileFilterControls } from "@/components/presentation/file-filter-controls.tsx";
-import { useDiffContext } from "@/context/diff-context.tsx";
-import { useFileFilter } from "@/hooks/use-file-filter.tsx";
-import { Input } from "@/components/shadcn/input.tsx";
-import { Button } from "@/components/shadcn/button.tsx";
-import { Separator } from "@/components/shadcn/separator.tsx";
+import { useDebounce, useLocalStorage } from "@uidotdev/usehooks";
 import { Play, PlusIcon, Trash } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
-import { Checkbox } from "@/components/shadcn/checkbox.tsx";
-import { Label } from "@/components/shadcn/label.tsx";
-import { useSet } from "@/hooks/use-set.tsx";
 import type { FileData } from "react-diff-view";
-import { useDebounce, useLocalStorage } from "@uidotdev/usehooks";
+import { FileList } from "@/components/presentation/diff-file-list.tsx";
+import { FileFilterControls } from "@/components/presentation/file-filter-controls.tsx";
+import { Button } from "@/components/shadcn/button.tsx";
 import {
 	Card,
 	CardAction,
 	CardHeader,
 	CardTitle,
 } from "@/components/shadcn/card.tsx";
+import { Checkbox } from "@/components/shadcn/checkbox.tsx";
+import { Input } from "@/components/shadcn/input.tsx";
+import { Label } from "@/components/shadcn/label.tsx";
+import { Separator } from "@/components/shadcn/separator.tsx";
+import { useDiffContext } from "@/context/diff-context.tsx";
+import { useFileFilter } from "@/hooks/use-file-filter.tsx";
+import { useSet } from "@/hooks/use-set.tsx";
 
 interface CommandBuilderSteps {
 	directory: string;

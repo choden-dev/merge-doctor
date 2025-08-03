@@ -1,3 +1,4 @@
+import { Link, useLocation } from "react-router";
 import {
 	Sidebar,
 	SidebarContent,
@@ -10,7 +11,6 @@ import {
 	SidebarMenuItem,
 } from "@/components/shadcn/sidebar.tsx";
 import { useSidebarEnabled, useSidebarItems } from "@/hooks/sidebar.tsx";
-import { Link, useLocation } from "react-router";
 
 // Menu items.
 export const AppSidebar = () => {

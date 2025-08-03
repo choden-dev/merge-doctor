@@ -1,5 +1,3 @@
-import { useLocation, useParams } from "react-router";
-import { ROUTES_WITH_SIDEBAR, VALID_ROUTES } from "@/constants/routes.ts";
 import {
 	FlaskConicalIcon,
 	InfoIcon,
@@ -8,6 +6,8 @@ import {
 	SparkleIcon,
 } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
+import { useLocation, useParams } from "react-router";
+import { ROUTES_WITH_SIDEBAR, VALID_ROUTES } from "@/constants/routes.ts";
 
 export const useSidebarEnabled = () => {
 	const { pathname } = useLocation();

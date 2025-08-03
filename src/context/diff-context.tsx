@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useState } from "react";
-import { FileData, parseDiff } from "react-diff-view";
+import { type FileData, parseDiff } from "react-diff-view";
 import type { WithChildren } from "@/components/styling/styling-util-types.tsx";
-import { RemoteRepository } from "@/types/repository.ts";
 import { RemoteRepositoryController } from "@/controllers/remote-repository.ts";
+import type { RemoteRepository } from "@/types/repository.ts";
 
 export interface DiffInformation {
 	diffWithTarget: FileData[];

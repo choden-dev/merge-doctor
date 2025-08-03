@@ -1,5 +1,5 @@
-import { forwardRef, type ComponentProps, type ElementType } from "react";
 import { Slot } from "@radix-ui/react-slot";
+import { type ComponentProps, type ElementType, forwardRef } from "react";
 
 /**
  * https://github.com/shadcn-ui/ui/issues/4185

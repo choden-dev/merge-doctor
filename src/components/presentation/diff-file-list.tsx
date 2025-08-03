@@ -1,13 +1,13 @@
-import { Button } from "@/components/shadcn/button.tsx";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { FileData } from "react-diff-view";
 import { shortenDirectoryPath } from "@/components/presentation/utils.ts";
+import { Button } from "@/components/shadcn/button.tsx";
+import { DataStatePropInterceptor } from "@/components/shadcn/data-state-interpreter.tsx";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/shadcn/tooltip.tsx";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { DataStatePropInterceptor } from "@/components/shadcn/data-state-interpreter.tsx";
 
 interface FileListItemProps extends FileData {
 	onClick?: () => void;

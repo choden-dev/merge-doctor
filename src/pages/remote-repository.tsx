@@ -1,12 +1,12 @@
+import { RefreshCcwIcon } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 import { Navigate, Outlet, useParams } from "react-router";
 import { SectionLayout } from "@/components/layout/section-layout.tsx";
+import { Button } from "@/components/shadcn/button.tsx";
 import { Skeleton } from "@/components/shadcn/skeleton.tsx";
 import { VALID_ROUTES } from "@/constants/routes.ts";
 import { useDiffContext } from "@/context/diff-context.tsx";
 import { useRemoteRepositories } from "@/controllers/remote-repository.ts";
-import { RefreshCcwIcon } from "lucide-react";
-import { Button } from "@/components/shadcn/button.tsx";
 export const RemoteRepositoryPage = () => {
 	const params = useParams();
 	const [remoteRepositories] = useRemoteRepositories();
