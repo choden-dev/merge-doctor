@@ -3,18 +3,18 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { AppLayout } from "@/components/layout/app-layout.tsx";
-import { VALID_ROUTES } from "@/constants/routes.ts";
-import { DiffContextProvider } from "@/context/diff-context.tsx";
-import { AddRepositoryPage } from "@/pages/add-repository.tsx";
-import { LandingPage } from "@/pages/landing.tsx";
-import { RemoteRepositoryPage } from "@/pages/remote-repository.tsx";
-import { RemoteRepositoryMergePreview } from "@/pages/views/remote-repository/merge-preview.tsx";
-import { RepositoryCommandBuilder } from "@/pages/views/remote-repository/command-builder.tsx";
 import {
 	LS_STORED_FORMATTING_COMMANDS,
 	LS_STORED_TEST_COMMANDS,
 	LS_STORED_TYPECHECK_COMMANDS,
 } from "@/constants/local-storage-keys.ts";
+import { VALID_ROUTES } from "@/constants/routes.ts";
+import { DiffContextProvider } from "@/context/diff-context.tsx";
+import { AddRepositoryPage } from "@/pages/add-repository.tsx";
+import { LandingPage } from "@/pages/landing.tsx";
+import { RemoteRepositoryPage } from "@/pages/remote-repository.tsx";
+import { RepositoryCommandBuilder } from "@/pages/views/remote-repository/command-builder.tsx";
+import { RemoteRepositoryMergePreview } from "@/pages/views/remote-repository/merge-preview.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<React.StrictMode>
