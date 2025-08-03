@@ -1,0 +1,4 @@
+pre-commit:
+  jobs:
+    - name: fix biome errors
+      run: pnpm biome check {staged_files} --write
