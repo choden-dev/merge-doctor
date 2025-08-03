@@ -5,7 +5,7 @@ import { VALID_ROUTES } from "@/constants/routes.ts";
 import { useRemoteRepositories } from "@/controllers/remote-repository.ts";
 
 export const LandingPage = () => {
-	const [repositories] = useRemoteRepositories();
+	const [repositories, setRepositories] = useRemoteRepositories();
 
 	const navigate = useNavigate();
 	return (
@@ -20,6 +20,13 @@ export const LandingPage = () => {
 						handleSelect={() =>
 							navigate(`${VALID_ROUTES.REMOTE_REPOSITORY_ROUTE}/${repo.id}`)
 						}
+						handleDelete={() => {
+							setRepositories(
+								repositories.filter(
+									(existingRepo) => existingRepo.id !== repo.id,
+								),
+							);
+						}}
 					/>
 				))}
 			</div>

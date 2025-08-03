@@ -21,8 +21,10 @@ export const RepositoryHomepageCard = ({
 }: RepositoryHomepageCardProps) => {
 	return (
 		<Card>
-			<CardHeader onClick={handleSelect}>
-				<CardTitle className="cursor-pointer">{name}</CardTitle>
+			<CardHeader>
+				<CardTitle className="cursor-pointer" onClick={handleSelect}>
+					{name}
+				</CardTitle>
 				<CardDescription>{caption}</CardDescription>
 				<CardAction className="cursor-pointer" onClick={handleDelete}>
 					Remove

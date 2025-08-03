@@ -50,7 +50,22 @@ export const RemoteRepositoryPage = () => {
 				)}
 			</div>
 			<SectionLayout title={`(remote) ${repo.host}`}>
-				{isLoading ? <Skeleton className="h-10 w-[250px]" /> : <Outlet />}
+				{isLoading ? (
+					<div className="flex flex-col gap-4">
+						<Skeleton className="h-10 w-[250px]" />
+						<Skeleton className="h-12 w-[250px]" />
+						<Skeleton className="h-4 w-full" />
+						<Skeleton className="h-32 w-full" />
+						<Skeleton className="h-24 w-full" />
+						<Skeleton className="h-4 w-full" />
+						<Skeleton className="h-4 w-full" />
+						<Skeleton className="h-4 w-full" />
+						<Skeleton className="h-4 w-full" />
+						<Skeleton className="h-4 w-full" />
+					</div>
+				) : (
+					<Outlet />
+				)}
 			</SectionLayout>
 		</>
 	);
