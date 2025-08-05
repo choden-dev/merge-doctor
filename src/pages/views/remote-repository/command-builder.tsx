@@ -2,7 +2,7 @@ import { useDebounce, useLocalStorage, useMap } from "@uidotdev/usehooks";
 import { Play, PlusIcon, Trash } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FileData } from "react-diff-view";
-import { FileList } from "@/components/presentation/diff-file-list.tsx";
+import { FileList } from "@/components/presentation/diff/diff-file-list.tsx";
 import { FileFilterControls } from "@/components/presentation/file-filter-controls.tsx";
 import { Button } from "@/components/shadcn/button.tsx";
 import {

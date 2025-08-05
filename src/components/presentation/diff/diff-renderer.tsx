@@ -2,9 +2,10 @@ import { Diff, type FileData, Hunk } from "react-diff-view";
 import {
 	FileList,
 	type FileListProps,
-} from "@/components/presentation/diff-file-list.tsx";
+} from "@/components/presentation/diff/diff-file-list.tsx";
+import { tokenise } from "@/components/presentation/diff/tokenise.ts";
 import { generateIdentifierForFile } from "@/components/presentation/utils.ts";
-import { Card, CardHeader, CardTitle } from "@/components/shadcn/card.tsx";
+import { Separator } from "@/components/shadcn/separator.tsx";
 import type { DiffInformation } from "@/context/diff-context.tsx";
 
 export const FileDiff = ({
@@ -23,18 +24,20 @@ export const FileDiff = ({
 
 	return (
 		<div className="flex flex-col gap-1">
-			<Card id={generateIdentifierForFile(oldRevision, newRevision)}>
-				<CardHeader>
-					<CardTitle>
-						{oldPath} - {newPath}
-					</CardTitle>
-				</CardHeader>
-			</Card>
+			<Separator />
+			<h4
+				id={generateIdentifierForFile(oldRevision, newRevision)}
+				className="font-bold"
+			>
+				{oldPath} - {newPath}
+			</h4>
+			<Separator />
 			<Diff
 				key={generateIdentifierForFile(oldRevision, newRevision)}
 				viewType="unified"
 				diffType={type}
 				hunks={hunks}
+				tokens={tokenise(hunks)}
 			>
 				{(hunks) =>
 					hunks.map((hunk) => <Hunk key={hunk.content} hunk={hunk} />)
@@ -50,6 +53,7 @@ export const FileDiff = ({
 interface DiffViewProps
 	extends Required<Omit<DiffInformation, "targetBranch">>,
 		Pick<FileListProps, "onClick"> {}
+
 export const DiffView = ({
 	diffWithTarget,
 	repository,
@@ -58,19 +62,19 @@ export const DiffView = ({
 }: DiffViewProps) => {
 	return (
 		<div className="flex flex-col gap-2" key={onClick?.name}>
-			<h3 className="font-bold text-lg">
-				Repo at: <code>{repository.fullPathOnRemote}</code>
-			</h3>
-			<p>
-				{/** TODO: update once not limited to master branch */}
-				<strong>{diffWithTarget.length}</strong> files changed compared to
-				master
-			</p>
-			<p className="italic text-sm">Current branch: {currentBranch}</p>
-
+			<DiffSummary
+				repository={repository}
+				filesChanged={diffWithTarget.length}
+				currentBranch={currentBranch}
+			/>
 			<section className="flex relative gap-2">
-				<section className="flex flex-col gap-1 max-w-[300px] sticky top-0 max-h-screen overflow-y-auto">
-					<FileList groupByPath files={diffWithTarget} onClick={onClick} />
+				<section className="flex flex-col gap-1 w-1/4 sticky top-16 max-h-screen overflow-y-auto">
+					<FileList
+						groupByPath
+						files={diffWithTarget}
+						onClick={onClick}
+						initialExpandedDirs={[""]}
+					/>
 				</section>
 				<section className="flex flex-col gap-2 flex-1">
 					{diffWithTarget.map(FileDiff)}
@@ -97,11 +101,13 @@ export const DiffSummary = ({
 			<h3 className="font-bold text-lg">
 				Repo at: <code>{repository.fullPathOnRemote}</code>
 			</h3>
-			<p>
-				{/** TODO: update once not limited to master branch */}
-				<strong>{filesChanged}</strong> files changed compared to master
-			</p>
-			<p className="italic text-sm">Current branch: {currentBranch}</p>
+			<div className="flex flex-col gap-2 sticky top-0 py-2 z-[999]  bg-white/90 border-b border-b-sidebar-border">
+				<p>
+					{/** TODO: update once not limited to master branch */}
+					<strong>{filesChanged}</strong> files changed compared to master
+				</p>
+				<p className="italic text-sm">Current branch: {currentBranch}</p>
+			</div>
 		</>
 	);
 };

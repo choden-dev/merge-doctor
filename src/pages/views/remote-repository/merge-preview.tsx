@@ -1,4 +1,4 @@
-import { DiffView } from "@/components/presentation/diff-renderer.tsx";
+import { DiffView } from "@/components/presentation/diff/diff-renderer.tsx";
 import { generateIdentifierForFile } from "@/components/presentation/utils.ts";
 import { useDiffContext } from "@/context/diff-context.tsx";
 
