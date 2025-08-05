@@ -32,7 +32,7 @@ export const FileDiff = ({
 			</Card>
 			<Diff
 				key={generateIdentifierForFile(oldRevision, newRevision)}
-				viewType="split"
+				viewType="unified"
 				diffType={type}
 				hunks={hunks}
 			>
@@ -70,7 +70,7 @@ export const DiffView = ({
 
 			<section className="flex relative gap-2">
 				<section className="flex flex-col gap-1 max-w-[300px] sticky top-0 max-h-screen overflow-y-auto">
-					<FileList files={diffWithTarget} onClick={onClick} />
+					<FileList groupByPath files={diffWithTarget} onClick={onClick} />
 				</section>
 				<section className="flex flex-col gap-2 flex-1">
 					{diffWithTarget.map(FileDiff)}

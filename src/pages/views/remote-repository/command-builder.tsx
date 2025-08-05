@@ -257,6 +257,7 @@ export const RepositoryCommandBuilder = ({
 					/>
 					<div className="sm:grid-cols-1 md:grid-cols-2 grid-cols-3 grid gap-1 mt-2">
 						<FileList
+							groupByPath
 							files={filteredFiles}
 							onClick={handleFileClicked}
 							selectedFiles={[...filesSet]}
