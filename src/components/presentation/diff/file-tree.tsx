@@ -98,7 +98,6 @@ export const FileTreeItem = ({
 	const isExpanded = expanded.has(node.path);
 	const hasChildren =
 		Object.keys(node.children).length > 0 || node.files.length > 0;
-	console.log(node);
 	return (
 		<div className="w-full">
 			{node.name !== undefined && (

@@ -6,6 +6,13 @@ import {
 } from "@/components/presentation/diff/diff-file-list.tsx";
 import { tokenise } from "@/components/presentation/diff/tokenise.ts";
 import { generateIdentifierForFile } from "@/components/presentation/utils.ts";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/shadcn/select.tsx";
 import { Separator } from "@/components/shadcn/separator.tsx";
 import type { DiffInformation } from "@/context/diff-context.tsx";
 
@@ -54,20 +61,26 @@ export const FileDiff = ({
  */
 interface DiffViewProps
 	extends Required<Omit<DiffInformation, "targetBranch">>,
-		Pick<FileListProps, "onClick"> {}
+		Pick<FileListProps, "onClick"> {
+	onRefChange?: (refName: string) => void;
+}
 
 export const DiffView = ({
 	diffWithTarget,
 	repository,
 	currentBranch,
 	onClick,
+	additionalRefs = [],
+	onRefChange,
 }: DiffViewProps) => {
 	return (
-		<div className="flex flex-col gap-2" key={onClick?.name}>
+		<div className="flex flex-col gap-2 relative" key={onClick?.name}>
 			<DiffSummary
 				repository={repository}
 				filesChanged={diffWithTarget.length}
 				currentBranch={currentBranch}
+				additionalRefs={additionalRefs}
+				onRefChange={onRefChange}
 			/>
 			<section className="flex relative gap-2">
 				<section className="flex flex-col gap-1 w-1/4 sticky top-16 max-h-screen overflow-y-auto">
@@ -97,6 +110,8 @@ export const DiffSummary = ({
 	repository,
 	currentBranch,
 	filesChanged,
+	onRefChange,
+	additionalRefs,
 }: DiffSummaryProps) => {
 	return (
 		<>
@@ -104,11 +119,26 @@ export const DiffSummary = ({
 				Repo at: <code>{repository.fullPathOnRemote}</code>
 			</h3>
 			<div className="flex flex-col gap-2 sticky top-0 py-2 z-[999]  bg-white/90 border-b border-b-sidebar-border">
-				<p>
-					{/** TODO: update once not limited to master branch */}
-					<strong>{filesChanged}</strong> files changed compared to master
-				</p>
-				<p className="italic text-sm">Current branch: {currentBranch}</p>
+				<span className="flex items-center gap-2">
+					<p>
+						{/** TODO: update once not limited to master branch */}
+						<strong>{filesChanged}</strong> files changed compared to master for
+						the ref:
+					</p>
+					<Select defaultValue={currentBranch} onValueChange={onRefChange}>
+						<SelectTrigger>
+							<SelectValue defaultValue={currentBranch} />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value={currentBranch}>{currentBranch}</SelectItem>
+							{additionalRefs?.map((refName) => (
+								<SelectItem key={refName} value={refName}>
+									{refName}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+				</span>
 			</div>
 		</>
 	);

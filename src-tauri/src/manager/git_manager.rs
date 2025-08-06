@@ -36,13 +36,12 @@ impl GitManager {
             .await
     }
 
-    pub async fn get_merge_preview_with_master(&self) -> Result<CommandResult, GitCommandError> {
-        let current_branch_result = self.get_git_current_branch().await;
-        let current_branch = current_branch_result?.output.clone();
-
+    pub async fn get_merge_preview_with_target_branch(&self, target_branch: &str, to_compare: &str) -> Result<CommandResult, GitCommandError> {
         let merge_base_arg = format!(
-            "$(git merge-base master {} master)",
-            current_branch
+            "$(git merge-base {} {} {})",
+            target_branch,
+            to_compare,
+            target_branch
         );
         self.executor
             .execute_command(&[

@@ -16,7 +16,6 @@ export const AppSidebar = () => {
 	const isEnabled = useSidebarEnabled();
 	const items = useSidebarItems();
 	const { pathname } = useLocation();
-	console.log(pathname);
 	if (!isEnabled || !items.length) return null;
 
 	return (

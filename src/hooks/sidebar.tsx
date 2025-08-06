@@ -34,7 +34,7 @@ export const useSidebarItems = (): SidebarItem[] => {
 		return [
 			{
 				title: "Merge Preview",
-				url: VALID_ROUTES.REMOTE_REPOSITORY_ROUTE + `/${id}`,
+				url: `${VALID_ROUTES.REMOTE_REPOSITORY_ROUTE}/${id}`,
 				icon: ListIcon,
 			},
 			{

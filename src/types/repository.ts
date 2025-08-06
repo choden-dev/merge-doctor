@@ -22,4 +22,5 @@ export interface RemoteRepository {
 	 * /ubuntu/path-to-the-repo-root
 	 */
 	fullPathOnRemote: string;
+	mainBranch?: string;
 }

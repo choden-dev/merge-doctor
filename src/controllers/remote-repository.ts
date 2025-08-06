@@ -1,42 +1,47 @@
-import { invoke } from "@tauri-apps/api/core";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { LS_STORED_REMOTE_REPOSITORIES } from "@/constants/local-storage-keys.ts";
+import { commands } from "@/types/__generated__/bindings.ts";
 import type { RemoteRepository } from "@/types/repository.ts";
-import type { CommandResult } from "@/types/tauri.ts";
 
 export class RemoteRepositoryController {
 	private readonly connectionType = "Ssh";
-	private readonly commandOptions;
+	private readonly sshConfig;
 	constructor(
 		private readonly hostName: string,
 		private readonly workingDirectory: string,
 	) {
-		this.commandOptions = {
-			connectionType: this.connectionType,
-			sshConfig: {
-				host: this.hostName,
-				working_directory: this.workingDirectory,
-			},
+		this.sshConfig = {
+			host: this.hostName,
+			working_directory: this.workingDirectory,
 		};
 	}
 
-	async checkRepositoryHealth(): Promise<CommandResult> {
-		return await invoke("git_repo_full_path", this.commandOptions);
+	async checkRepositoryHealth() {
+		return await commands.gitRepoFullPath(this.connectionType, this.sshConfig);
 	}
 
-	async getCurrentGitBranch(): Promise<CommandResult> {
-		return await invoke("git_current_branch_name", this.commandOptions);
+	async getCurrentGitBranch() {
+		return await commands.gitCurrentBranchName(
+			this.connectionType,
+			this.sshConfig,
+		);
 	}
 
-	async getDiffForPreviewMergeWithMaster(): Promise<CommandResult> {
-		return await invoke("git_preview_merge_with_master", this.commandOptions);
+	async getMergePreviewWithTargetBranch(target: string, toCompare: string) {
+		return await commands.gitMergePreviewWithTargetBranch(
+			this.connectionType,
+			this.sshConfig,
+			target,
+			toCompare,
+		);
 	}
 
-	async runFreeformCommand(command: string): Promise<CommandResult> {
-		return await invoke("custom_command_freeform", {
-			...this.commandOptions,
+	async runFreeformCommand(command: string) {
+		return await commands.customCommandFreeform(
+			this.connectionType,
+			this.sshConfig,
 			command,
-		});
+		);
 	}
 }
 

@@ -5,6 +5,7 @@ use crate::{
 use tauri::command;
 
 #[command]
+#[specta::specta]
 pub async fn custom_command_freeform(
     connection_type: ConnectionType,
     ssh_config: Option<SshConfig>,

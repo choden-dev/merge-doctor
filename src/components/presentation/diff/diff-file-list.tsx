@@ -8,7 +8,7 @@ import {
 } from "@/components/presentation/diff/file-tree.tsx";
 import { shortenDirectoryPath } from "@/components/presentation/utils.ts";
 import { Button } from "@/components/shadcn/button.tsx";
-import { ScrollArea } from "@/components/shadcn/scroll-area.tsx";
+import { ScrollArea, ScrollBar } from "@/components/shadcn/scroll-area.tsx";
 import { cn } from "@/lib/utils.ts";
 
 export interface FileListProps {
@@ -85,7 +85,7 @@ export const FileList = ({
 	return (
 		<ScrollArea className={cn("h-full w-full rounded-md border", className)}>
 			<div className="p-2 space-y-1">
-				<div className="flex gap-2 mb-2">
+				<div className="flex gap-2 absolute top-2">
 					<Button variant="outline" size="sm" onClick={handleExpandAll}>
 						Expand All
 					</Button>
@@ -102,6 +102,8 @@ export const FileList = ({
 					onToggleExpand={handleToggleExpand}
 				/>
 			</div>
+			<ScrollBar orientation="horizontal" />
+			<ScrollBar orientation="vertical" />
 		</ScrollArea>
 	);
 };

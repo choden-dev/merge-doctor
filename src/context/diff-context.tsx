@@ -12,12 +12,17 @@ export interface DiffInformation {
 	targetBranch: "master" | "main";
 	currentBranch: string;
 	repository?: RemoteRepository; // TODO: add support for local repos
+	additionalRefs: string[];
 }
 
 interface IDiffContext extends DiffInformation {
 	setInformation: (newInformation: Partial<DiffInformation>) => void;
 	isLoading: boolean;
-	fetchRemoteRepositoryInformation: (repo?: RemoteRepository) => void;
+	fetchRemoteRepositoryInformation: (
+		repo?: RemoteRepository,
+		refToCompare?: string,
+	) => void;
+	fetchAdditionalRefs: (repo?: RemoteRepository) => void;
 }
 
 const DEFAULT_VALUES: IDiffContext = {
@@ -27,6 +32,8 @@ const DEFAULT_VALUES: IDiffContext = {
 	setInformation: () => {},
 	fetchRemoteRepositoryInformation: () => {},
 	isLoading: false,
+	additionalRefs: [],
+	fetchAdditionalRefs: () => {},
 } as const;
 
 const DiffContext = createContext<IDiffContext | undefined>(undefined);
@@ -49,8 +56,18 @@ export const DiffContextProvider = ({ children }: WithChildren) => {
 		setInformation((prev) => ({ ...prev, ...newData }));
 	}, []);
 
-	const fetchRemoteRepositoryInformation = useCallback(
+	const fetchAdditionalRefs = useCallback(
 		async (repo?: RemoteRepository) => {
+			if (!repo || isLoading) return;
+			setIsLoading(true);
+			// TODO: implement
+		},
+		[isLoading],
+	);
+
+	const fetchRemoteRepositoryInformation = useCallback(
+		// TODO: complete customisable ref
+		async (repo?: RemoteRepository, refToCompare?: string) => {
 			if (!repo || isLoading) return;
 			setIsLoading(true);
 			try {
@@ -58,13 +75,20 @@ export const DiffContextProvider = ({ children }: WithChildren) => {
 					repo.host,
 					repo.workingDirectory,
 				);
-				const [branchResult, diffResult] = await Promise.all([
-					repoController.getCurrentGitBranch(),
-					repoController.getDiffForPreviewMergeWithMaster(),
-				]);
+				const branchResult = await repoController.getCurrentGitBranch();
+				const currentBranch =
+					branchResult.status === "ok" ? branchResult.data.output : "HEAD";
+
+				const diffResult = await repoController.getMergePreviewWithTargetBranch(
+					information.targetBranch,
+					currentBranch,
+				);
 				updateInformation({
-					currentBranch: branchResult.output,
-					diffWithTarget: parseDiff(diffResult.output || ""),
+					currentBranch: refToCompare ?? currentBranch,
+					diffWithTarget:
+						diffResult.status === "ok"
+							? parseDiff(diffResult.data.output || "")
+							: undefined,
 					repository: repo,
 				});
 			} catch (error) {
@@ -73,7 +97,7 @@ export const DiffContextProvider = ({ children }: WithChildren) => {
 				setIsLoading(false);
 			}
 		},
-		[updateInformation, isLoading],
+		[updateInformation, isLoading, information],
 	);
 
 	return (
@@ -82,6 +106,7 @@ export const DiffContextProvider = ({ children }: WithChildren) => {
 				...information,
 				setInformation: updateInformation,
 				fetchRemoteRepositoryInformation,
+				fetchAdditionalRefs,
 				isLoading,
 			}}
 		>

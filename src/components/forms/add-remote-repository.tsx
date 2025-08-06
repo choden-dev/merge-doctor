@@ -1,10 +1,12 @@
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router";
 import { normalisePaths } from "@/components/forms/utils.ts";
 import { Button } from "@/components/shadcn/button.tsx";
 import { Input } from "@/components/shadcn/input.tsx";
 import { Label } from "@/components/shadcn/label.tsx";
 import { FieldLabelContainer } from "@/components/styling/field-label-container.tsx";
 import { FormContainer } from "@/components/styling/form-container.tsx";
+import { VALID_ROUTES } from "@/constants/routes.ts";
 import {
 	RemoteRepositoryController,
 	useRemoteRepositories,
@@ -37,6 +39,8 @@ export const AddRemoteRepositoryForm = () => {
 	const [error, setError] = useState<Error | null>(null);
 	const [currentRepositories, addRemoteRepository] = useRemoteRepositories();
 
+	const navigate = useNavigate();
+
 	const { remoteHost, workingDirectory } = formState;
 	const isValid = remoteHost && workingDirectory;
 	const commandToRun = `ssh ${remoteHost} "cd ${workingDirectory} && git rev-parse --show-toplevel"`;
@@ -51,12 +55,14 @@ export const AddRemoteRepositoryForm = () => {
 				workingDirectory,
 			).checkRepositoryHealth();
 
-			if (output.success && output.output) {
+			if (output.status === "ok" && output.data) {
+				const repositoryId =
+					normalisePaths(remoteHost) + normalisePaths(workingDirectory);
 				const toAdd: RemoteRepository = {
 					id: normalisePaths(remoteHost) + normalisePaths(workingDirectory),
 					host: remoteHost,
 					workingDirectory,
-					fullPathOnRemote: output.output,
+					fullPathOnRemote: output.data.output,
 				};
 
 				if (!validateRemoteRepoDoesntAlreadyExist(toAdd, currentRepositories)) {
@@ -65,8 +71,10 @@ export const AddRemoteRepositoryForm = () => {
 				}
 
 				addRemoteRepository([...currentRepositories, toAdd]);
+				navigate(`${VALID_ROUTES.REMOTE_REPOSITORY_ROUTE}/${repositoryId}`);
 			} else {
-				setError(new Error(output.error || GENERIC_ERROR));
+				if (output.status === "error")
+					setError(new Error(output.error || GENERIC_ERROR));
 			}
 		} catch (e) {
 			setError(e instanceof Error ? e : new Error(GENERIC_ERROR));
@@ -74,6 +82,7 @@ export const AddRemoteRepositoryForm = () => {
 	}, [
 		addRemoteRepository,
 		currentRepositories,
+		navigate,
 		isValid,
 		remoteHost,
 		workingDirectory,
