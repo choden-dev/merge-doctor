@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Diff, type FileData, Hunk } from "react-diff-view";
 import {
 	FileList,
@@ -17,6 +18,7 @@ export const FileDiff = ({
 	newPath,
 	oldPath,
 }: FileData) => {
+	const tokens = useMemo(() => tokenise(hunks), [hunks]);
 	if (isBinary) {
 		// TODO: we can definitely handle this better
 		return null;
@@ -37,7 +39,7 @@ export const FileDiff = ({
 				viewType="unified"
 				diffType={type}
 				hunks={hunks}
-				tokens={tokenise(hunks)}
+				tokens={tokens}
 			>
 				{(hunks) =>
 					hunks.map((hunk) => <Hunk key={hunk.content} hunk={hunk} />)
